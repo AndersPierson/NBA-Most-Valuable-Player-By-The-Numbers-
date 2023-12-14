@@ -65,9 +65,8 @@ st.markdown(
 chart = alt.Chart(salarytopoints_df, title='Price Per Game by PPG and Base Weights').mark_bar(
     opacity=1,
     ).encode(
-    x =alt.X('Player', sort = ["Current Salary vs. Performance_wP", "Current Salary vs. Performance_wPFG"],  axis=None),
-    y =alt.Y('value:Q'),
-    color= alt.Color('Player')
+    x =alt.X('Price Per Minimum Played_C', sort = ["Current Salary vs. Performance_wP", "Current Salary vs. Performance_wPFG"],  axis=None),
+    y =alt.Y('value:Q')
 ).configure_view(stroke='transparent')
 
-chart.display()
+st.altair_chart(chart, use_container_width=True)
