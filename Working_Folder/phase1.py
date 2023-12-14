@@ -44,4 +44,4 @@ st.markdown(
 """
 )
 
-st.image('')
+st.image('JoelEmbiidMVP.jpg')
