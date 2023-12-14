@@ -65,7 +65,7 @@ st.markdown(
 chart = alt.Chart(salarytopoints_df, title='Price Per Game by PPG and Base Weights').mark_bar(
     opacity=1,
     ).encode(
-    x =alt.X('Price Per Minimum Played_C',  axis=None),
+    x =alt.X('Price Per Minimum Played_C:O',  axis=None),
     y =alt.Y('value:Q')
 ).configure_view(stroke='transparent')
 
