@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 
 
-plyr_salary = pd.read_csv("Dataset\RankedPlayersbySalary.csv", encoding="unicode_escape")
+plyr_salary = pd.read_csv("Dataset\RankedPlayersbySalaryNonCurr.csv", encoding="unicode_escape")
 plyr_points = pd.read_csv("Dataset\RankedPlayersbyPoints.csv", encoding='unicode_escape')
 plyr_assists = pd.read_csv("Dataset\RankedPlayersbyAssists.csv", encoding='unicode_escape')
 plyr_rebounds = pd.read_csv("Dataset\RankedPlayersbyRebounds.csv", encoding='unicode_escape')
@@ -39,9 +39,12 @@ st.sidebar.success("Select a page from this menu!")
 st.markdown(
     """
     Each year, the NBA deems one player from a playoff team the "Most Valuable Player"...
+    
     ...However, just how valuable are players contracts according to their performance?
+    
     In this project, we delve into three metrics (Points Per Game, Assists Per Game, Rebounds Per Game) in order to gain a comparison for what metrics are best for determining contract value.
 """
 )
 
-st.image('JoelEmbiidMVP.jpg')
+st.image('Working_Folder\JoelEmbiidMVP.jpg')
+
