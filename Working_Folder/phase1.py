@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
+import altair as alt
 
 
 plyr_salary = pd.read_csv("Dataset\RankedPlayersbySalaryNonCurr.csv", encoding="unicode_escape")
@@ -48,3 +49,25 @@ st.markdown(
 
 st.image('Working_Folder\JoelEmbiidMVP.jpg')
 
+st.write("# Grading Players by Points Per Game vs. Base Weighting Scale")
+
+st.markdown(
+    """
+    One of the most valuable ways of determining the value of a player is the points they can put up in each game and their average
+    (Points Per Game). 
+    
+    Here we will grade players using all three metrics but give Points Per Game the highest weight to test it against our base weighted
+    scales.
+
+"""
+)
+
+chart = alt.Chart(salarytopoints_df, title='Price Per Game by PPG and Base Weights').mark_bar(
+    opacity=1,
+    ).encode(
+    x =alt.X('Player', sort = ["Current Salary vs. Performance_wP", "Current Salary vs. Performance_wPFG"],  axis=None),
+    y =alt.Y('value:Q'),
+    color= alt.Color('Player')
+).configure_view(stroke='transparent')
+
+chart.display()
