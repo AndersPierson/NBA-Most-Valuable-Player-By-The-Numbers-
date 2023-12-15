@@ -93,7 +93,7 @@ st.markdown(
 melted_data_multibar_P = pd.melt(salarytopointstop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Current Salary vs. Performance_wP', 'Current Salary vs. Performance_wPFG'])
 
 
-group_barchart_P = alt.Chart(melted_data_multibar_P, title = "Player Expected Value vs. Actual Value").mark_bar().encode(
+group_barchart_P = alt.Chart(melted_data_multibar_P, title = "Player Expected Value vs. Actual Value - Top Shooters").mark_bar().encode(
     x=alt.X('Player:N', title='Player', sort=alt.EncodingSortField(field='PTS', op='sum', order='descending'), axis=None),
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics'),
@@ -207,7 +207,7 @@ st.markdown(
 melted_data_multibar_A = pd.melt(salarytoassiststop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Current Salary vs. Performance_wA', 'Current Salary vs. Performance_wAFG'])
 
 
-group_barchart_A = alt.Chart(melted_data_multibar_A, title = "Player Expected Value vs. Actual Value").mark_bar().encode(
+group_barchart_A = alt.Chart(melted_data_multibar_A, title = "Player Expected Value vs. Actual Value - Top Assisters").mark_bar().encode(
     x=alt.X('Player:N', title='Player', sort=alt.EncodingSortField(field='AST?', op='sum', order='descending'), axis=None),
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics'),
@@ -253,7 +253,7 @@ st.markdown(
 
 melted_data_multiline_A = pd.melt(salarytoassiststop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Accuracy Of Pay_wA', 'Accuracy Of Pay_wAFG'])
 
-line_chart_A = alt.Chart(melted_data_multiline_A, title= "Accuracy of Current Salary").mark_line().encode(
+line_chart_A = alt.Chart(melted_data_multiline_A, title= "Accuracy of Current Salary - Top Assiters").mark_line().encode(
     x='Player:N',
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics', scale=alt.Scale(scheme='category10')),
@@ -273,7 +273,8 @@ st.altair_chart(line_chart_A, use_container_width=False)
 st.markdown(
     """
     As we can see from our accuracy line plot, the contracts of the top assisters in the league currently are way more accurate than that of
-    the top shooters in the league. Being that because over half of the top assisters in the league are performing with $100,000 of their current contracts.
+    the top shooters in the league. Being that because over half of the top assisters in the league are performing with $100,000 over or under 
+    of their current contracts.
 """
 )
 st.markdown(
@@ -313,7 +314,7 @@ st.markdown(
     Current Season Salary / (Points Per Game * 1.5 + AssistsPerGame * 1.2 + Rebounds Per Game * 1 + Games Played
 
     The grouped bar chart below shows the visualizations as follows (from right to left): "Price Per Minimum Played_C", "Current Salary vs. Performance_wR", 
-    and "Current Salary vs. Performance_wRFG". The data includes the top 25 players filtered by Assists Per Game and the visualizations are sorted from highest
+    and "Current Salary vs. Performance_wRFG". The data includes the top 25 players filtered by Rebounds Per Game and the visualizations are sorted from highest
     to lowest going left to right.
 """
 )
@@ -321,7 +322,7 @@ st.markdown(
 melted_data_multibar_R = pd.melt(salarytoreboundstop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Current Salary vs. Performance_wR', 'Current Salary vs. Performance_wRFG'])
 
 
-group_barchart_R = alt.Chart(melted_data_multibar_R, title = "Player Expected Value vs. Actual Value").mark_bar().encode(
+group_barchart_R = alt.Chart(melted_data_multibar_R, title = "Player Expected Value vs. Actual Value - Top Rebounders").mark_bar().encode(
     x=alt.X('Player:N', title='Player', sort=alt.EncodingSortField(field='TRB?', op='sum', order='descending'), axis=None),
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics'),
@@ -339,9 +340,11 @@ st.altair_chart(group_barchart_R, use_container_width=False)
 
 st.markdown(
     """
-    From the visualization above, we can see that the current performance of the top assisters in the league does not follow the same flow of
-    of the top shooter in the league according to the grouped bar chart. Many of the players on this over and under perform according to their
-    contracts and expected performance. Once again, we must look to more avenues of analysis to grasp what correlations are before us.
+    The visualzation above is uniquely different than that of both the top shooters and top assisters in the league. While the current performance
+    overall follows a trend similar to that of the top shooters, when it comes to the players with big contracts, they are not folowing this trend of
+    where they are largely all over or laregly all under performing. When it comes to the top rebounders in the league some massively overperform, 
+    some massively underperform, and some are right on the money with their expected pace of cost of play. But in order to prove this we must 
+    once again turn to our chart of accuracy!
 
     -----------------------------------------------------------------------------------------------------------------------------------
 
@@ -350,15 +353,15 @@ st.markdown(
 
     We have created two variables to find out if players are truly overperforming or under performing according to their current season and salary:
 
-    The first variable, "Accuracy Of Pay_wA", takes the current season salary of a player and there current performance cost (weighted by Assists Per Game) and finds the difference
+    The first variable, "Accuracy Of Pay_wR", takes the current season salary of a player and there current performance cost (weighted by Rebounds Per Game) and finds the difference
     between the two. That formula is as follows:
 
-    "Price Per Minimum Played_C" - "Current Salary vs. Performance_wA"
+    "Price Per Minimum Played_C" - "Current Salary vs. Performance_wR"
 
-    The secound variable, "Accuracy Of Pay_wAFG", does the same as the first variable but the current performance cost is weigthed by the NBA Fantasy 
+    The secound variable, "Accuracy Of Pay_wRFG", does the same as the first variable but the current performance cost is weigthed by the NBA Fantasy 
     weight scales. That formula is as follows:
 
-    "Price Per Minimum Played_C" - "Current Salary vs. Performance_wAFG"
+    "Price Per Minimum Played_C" - "Current Salary vs. Performance_wRFG"
 
     The following visualization is a line plot of the average cost of a player for each game, and the difference between how they are measuring up
     to that cost with their current season performance.
@@ -367,7 +370,7 @@ st.markdown(
 
 melted_data_multiline_R = pd.melt(salarytoreboundstop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Accuracy Of Pay_wR', 'Accuracy Of Pay_wRFG'])
 
-line_chart_R = alt.Chart(melted_data_multiline_R, title= "Accuracy of Current Salary").mark_line().encode(
+line_chart_R = alt.Chart(melted_data_multiline_R, title= "Accuracy of Current Salary - Top Rebounders").mark_line().encode(
     x='Player:N',
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics', scale=alt.Scale(scheme='category10')),
@@ -386,8 +389,9 @@ st.altair_chart(line_chart_R, use_container_width=False)
 
 st.markdown(
     """
-    As we can see from our accuracy line plot, the contracts of the top assisters in the league currently are way more accurate than that of
-    the top shooters in the league. Being that because over half of the top assisters in the league are performing with $100,000 of their current contracts.
+    As we can see from the visualization above, not only are the contracts of the top rebounders in the league accurate for the most part, there
+    is also a predictable trend developing from the contract accuracy lines. Here we can see the the top rebounders with the highest salaries this
+    are more than likely underperforming in their contracts and will continue to do so!
 """
 )
 st.markdown(
