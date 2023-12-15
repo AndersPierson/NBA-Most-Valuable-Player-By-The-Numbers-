@@ -67,7 +67,25 @@ st.markdown(
     Here we will grade players using all three metrics but give Points Per Game the highest weight to test it against our base weighted
     scales.
 
-    
+    -----------------------------------------------------------------------------------------------------------------------------------
+
+    Our first visualization relies on the fabricated variable of "Price Per Minimum Played_C". This takes the current salary of players and divides
+    that salary by the minimum number of games they are required to play (65 games). This then gives us a number that is an average of their value
+    for each game hypothetically.
+
+    From this line of thought we then examine player performance based upon the three metrics cited in the introduction, and create two new
+    varaibles to stack up against how they are supposed to be played according to their cost to play each game. 
+    The first fabricated variable, "Current Salary vs. Performance_wP", puts a higher weight on Points Per Game and follows the following formula:
+
+    Current Season Salary / (Points Per Game * 1.5 + AssistsPerGame * 1.25 + Rebounds Per Game * 1.25 + Games Played
+
+    The second fabricated variable, "Current Salary vs. Performance_wPFG", puts a a weight on the three metrics
+    according to how they are weighted in default NBA fantasy leagues and follows the following formula:
+
+    Current Season Salary / (Points Per Game * 1.5 + AssistsPerGame * 1.2 + Rebounds Per Game * 1 + Games Played
+
+    The grouped bar chart below shows the visualizations as follows (from right to left): "Price Per Minimum Played_C", "Current Salary vs. Performance_wP", 
+    and "Current Salary vs. Performance_wPFG".
 """
 )
 
@@ -86,7 +104,7 @@ st.markdown(
 melted_data_multibar = pd.melt(salarytopointstop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Current Salary vs. Performance_wP', 'Current Salary vs. Performance_wPFG'])
 
 # Create a grouped bar chart
-chart = alt.Chart(melted_data_multibar).mark_bar().encode(
+group_barchart = alt.Chart(melted_data_multibar, title = "Player Expected Value vs. Actual Value").mark_bar().encode(
     x=alt.X('Player:N', title='Player', sort=alt.EncodingSortField(field='PTS', op='sum', order='descending'), axis=None),
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics'),
@@ -95,10 +113,15 @@ chart = alt.Chart(melted_data_multibar).mark_bar().encode(
     width=150  # Adjust the width of each column
 )
 
+group_barchart = group_barchart.configure_legend(
+    titleLimit=0,  # Set titleLimit to 0 to show the full variable names
+    labelLimit=0,  # Set labelLimit to 0 to show the full variable names
+)
+
 melted_data_multiline = pd.melt(salarytopointstop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Accuracy Of Pay_wP', 'Accuracy Of Pay_wPFG'])
 
 # Create a multi-line plot
-line_chart = alt.Chart(melted_data_multiline).mark_line().encode(
+line_chart = alt.Chart(melted_data_multiline, title= "Accuracy of Current Salary").mark_line().encode(
     x='Player:N',
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics', scale=alt.Scale(scheme='category10')),
@@ -108,6 +131,10 @@ line_chart = alt.Chart(melted_data_multiline).mark_line().encode(
     height=400  # Adjust the height of the plot
 )
 
-st.altair_chart(chart, use_container_width=False)
+line_chart = line_chart.configure_legend(
+    titleLimit=0,  # Set titleLimit to 0 to show the full variable names
+    labelLimit=0,  # Set labelLimit to 0 to show the full variable names
+)
+
+st.altair_chart(group_barchart, use_container_width=False)
 st.altair_chart(line_chart, use_container_width=False)
-# st.altair_chart(minimumsalarybypointsaccchart, use_container_width=True)
