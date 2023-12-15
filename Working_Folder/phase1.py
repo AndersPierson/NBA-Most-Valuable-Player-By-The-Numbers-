@@ -75,66 +75,94 @@ st.markdown(
 
     From this line of thought we then examine player performance based upon the three metrics cited in the introduction, and create two new
     varaibles to stack up against how they are supposed to be played according to their cost to play each game. 
-    The first fabricated variable, "Current Salary vs. Performance_wP", puts a higher weight on Points Per Game and follows the following formula:
+    The first variable, "Current Salary vs. Performance_wP", puts a higher weight on Points Per Game and follows the following formula:
 
     Current Season Salary / (Points Per Game * 1.5 + AssistsPerGame * 1.25 + Rebounds Per Game * 1.25 + Games Played
 
-    The second fabricated variable, "Current Salary vs. Performance_wPFG", puts a a weight on the three metrics
+    The second variable, "Current Salary vs. Performance_wPFG", puts a a weight on the three metrics
     according to how they are weighted in default NBA fantasy leagues and follows the following formula:
 
     Current Season Salary / (Points Per Game * 1.5 + AssistsPerGame * 1.2 + Rebounds Per Game * 1 + Games Played
 
     The grouped bar chart below shows the visualizations as follows (from right to left): "Price Per Minimum Played_C", "Current Salary vs. Performance_wP", 
-    and "Current Salary vs. Performance_wPFG".
+    and "Current Salary vs. Performance_wPFG". The data includes the top 25 players filtered by Points Per Game and the visualizations are sorted from highest
+    to lowest going left to right.
 """
 )
 
-
-# points = alt.Chart(salarytopointstop25_df).mark_circle(size=60).encode(
-#     x=alt.X("Price Per Minimum Played_C:Q"),
-#     y=alt.Y("Current Salary vs. Performance_wPFG:Q")
-# )
-
-# minimumsalarybypointsaccchart = alt.Chart(salarytopointstop25_df, title='Percentage of Accuracy of Contracts Per Game').mark_line().encode(
-#     x =alt.X('Player', axis = None),
-#     y =alt.Y('Accuracy Of Pay_wP:Q'),
-#     tooltip = ['Player', 'Accuracy Of Pay_wP:Q']
-# ).mark_point()
-
 melted_data_multibar = pd.melt(salarytopointstop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Current Salary vs. Performance_wP', 'Current Salary vs. Performance_wPFG'])
 
-# Create a grouped bar chart
+
 group_barchart = alt.Chart(melted_data_multibar, title = "Player Expected Value vs. Actual Value").mark_bar().encode(
     x=alt.X('Player:N', title='Player', sort=alt.EncodingSortField(field='PTS', op='sum', order='descending'), axis=None),
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics'),
     column=alt.Column('variable:N', title=None)
 ).properties(
-    width=150  # Adjust the width of each column
+    width=150
 )
 
 group_barchart = group_barchart.configure_legend(
-    titleLimit=0,  # Set titleLimit to 0 to show the full variable names
-    labelLimit=0,  # Set labelLimit to 0 to show the full variable names
+    titleLimit=0,  
+    labelLimit=0,  
+)
+
+st.altair_chart(group_barchart, use_container_width=False)
+
+st.markdown(
+    """
+    As we can see from the visualization above, our forumlas on a grand scheme seem to model the expected averages fairly well.
+    The flow of the average cost of each top 25 player almost matches that of what was calculated. These can only be assumed however at a glance, and we must go into further detail.
+
+    -----------------------------------------------------------------------------------------------------------------------------------
+
+    To really get a picture for how accurate the comparision of grading of performance of players against their salaries, we need further
+    insight into the data.
+
+    We have created two variables to find out if players are truly overperforming or under performing according to their current season and salary:
+
+    The first variable, "Accuracy Of Pay_wP", takes the current season salary of a player and there current performance cost (weighted by Points Per Game) and finds the difference
+    between the two. That formula is as follows:
+
+    "Price Per Minimum Played_C" - "Current Salary vs. Performance_wP"f
+
+    The secound variable, "Accuracy Of Pay_wPFG", does the same as the first variable but the current performance cost is weigthed by the NBA Fantasy 
+    weight scales. That formula is as follows:
+
+    "Price Per Minimum Played_C" - "Current Salary vs. Performance_wPFG"
+
+    The following visualization is a line plot of the average cost of a player for each game, and the difference between how they are measuring up
+    to that cost with their current season performance.
+"""
 )
 
 melted_data_multiline = pd.melt(salarytopointstop25_df, id_vars=['Player'], value_vars=['Price Per Minimum Played_C', 'Accuracy Of Pay_wP', 'Accuracy Of Pay_wPFG'])
 
-# Create a multi-line plot
 line_chart = alt.Chart(melted_data_multiline, title= "Accuracy of Current Salary").mark_line().encode(
     x='Player:N',
     y=alt.Y('value:Q', title='Values'),
     color=alt.Color('variable:N', title='Metrics', scale=alt.Scale(scheme='category10')),
     tooltip=['Player:N', 'value:Q']
 ).properties(
-    width=800,  # Adjust the width of the plot
-    height=400  # Adjust the height of the plot
+    width=800,
+    height=400
 )
 
 line_chart = line_chart.configure_legend(
-    titleLimit=0,  # Set titleLimit to 0 to show the full variable names
-    labelLimit=0,  # Set labelLimit to 0 to show the full variable names
+    titleLimit=0,  
+    labelLimit=0,  
 )
 
-st.altair_chart(group_barchart, use_container_width=False)
 st.altair_chart(line_chart, use_container_width=False)
+
+average_wP = salarytopointstop25_df["Accuracy Of Pay_wP"] / 65
+
+st.markdown(
+    """
+    As we can see from our accuracy visuaization, very few top shooting players overperform on their contracts. In fact most top shooting players
+    in the top 25 are missing their mark of producing the value of their contract.
+"""
+)
+average_var_text = "The average difference in performance of contract from the top 25 players by points per game is ${ :.2f}".format(average_wP)
+
+st.markdown(average_var_text)
