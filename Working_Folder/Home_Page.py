@@ -22,7 +22,7 @@ st.markdown(
 """
 )
 
-st.image('Working_Folder\JoelEmbiidMVP.jpg')
+st.image('Working_Folder/JoelEmbiidMVP.jpg')
 
 # st.write("# Grading Players by Points Per Game vs. Base Weighting Scale")
 

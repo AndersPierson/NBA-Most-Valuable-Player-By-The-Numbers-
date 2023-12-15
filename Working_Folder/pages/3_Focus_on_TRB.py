@@ -4,8 +4,8 @@ import streamlit as st
 import altair as alt
 
 
-plyr_salary = pd.read_csv("Dataset\RankedPlayersbySalaryNonCurr.csv", encoding="unicode_escape")
-plyr_rebounds = pd.read_csv("Dataset\RankedPlayersbyRebounds.csv", encoding='unicode_escape')
+plyr_salary = pd.read_csv("Dataset/RankedPlayersbySalaryNonCurr.csv", encoding="unicode_escape")
+plyr_rebounds = pd.read_csv("Dataset/RankedPlayersbyRebounds.csv", encoding='unicode_escape')
 
 plyr_salary["Price Per Minimum Played_C"] = np.round(plyr_salary['Salary 2023-24'] / 65, 2)
 
